@@ -1,0 +1,47 @@
+<?php
+/**
+ * ZF2 Buch Kapitel 9
+*
+* Das Buch "Zend Framework 2 - Von den Grundlagen bis zur fertigen Anwendung"
+* von Ralf Eggert ist im Addison-Wesley Verlag erschienen.
+* ISBN 978-3-8273-2994-3
+*
+* @package    Application
+* @author     Ralf Eggert <r.eggert@travello.de>
+* @copyright  Alle Listings sind urheberrechtlich geschützt!
+* @link       http://www.zendframeworkbuch.de/ und http://www.awl.de/2994
+*/
+
+/**
+ * namespace definition and usage
+ */
+use Zend\View\Helper\Doctype;
+
+/**
+ * Header view script
+*
+* @package    Application
+*/
+
+// prepare header
+$this->doctype(Doctype::HTML5);
+$this->headTitle('Luigis Pizza-Service');
+$this->headMeta()->appendName('viewport', 'width=device-width, initial-scale=1.0');
+$this->headMeta()->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8');
+$this->headMeta()->setCharset('UTF-8');
+$this->headLink()->prependStylesheet('/css/bootstrap.min.css');
+$this->headLink()->appendAlternate('/blog/rss', 'application/atom+xml', 'RSS Feed');
+$this->headScript()->prependFile('/js/html5.js', 'text/javascript', array('conditional' => 'lt IE 9',));
+?>
+<?php echo $this->doctype() . "\n";?>
+<html lang="en">
+<head>
+<?php echo $this->headTitle() . "\n"; ?>
+<?php echo $this->headMeta() . "\n"; ?>
+<?php echo $this->headLink() . "\n"; ?>
+<?php echo $this->headScript() . "\n"; ?>
+</head>
+<body>
+<!-- Hier könnte Ihre Werbung stehen... -->
+</body>
+</html>

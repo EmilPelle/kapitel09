@@ -1,0 +1,61 @@
+<?php 
+/**
+ * ZF2 Buch Kapitel 9
+ * 
+ * Das Buch "Zend Framework 2 - Von den Grundlagen bis zur fertigen Anwendung"
+ * von Ralf Eggert ist im Addison-Wesley Verlag erschienen. 
+ * ISBN 978-3-8273-2994-3
+ * 
+ * @package    Application
+ * @author     Ralf Eggert <r.eggert@travello.de>
+ * @copyright  Alle Listings sind urheberrechtlich geschützt!
+ * @link       http://www.zendframeworkbuch.de/ und http://www.awl.de/2994
+ */
+
+/**
+ * Listing 9.12 view script
+ * 
+ * @package    Application
+ */
+?>
+<div class="row">
+<div class="span9">
+<h1>Listing 9.12</h1>
+<h3><code>RandomPizza</code> View-Helper</h3>
+<pre>
+&lt;?php
+namespace Pizza\View\Helper;
+
+use Zend\Form\View\Helper\AbstractHelper;
+
+class RandomPizza extends AbstractHelper
+{
+    protected $random = null;
+    
+    public function __construct($random)
+    {
+        $this->setRandomPizza($random);
+    }
+    
+    public function setRandomPizza($random)
+    {
+        $this->random = $random;
+    }
+    
+    public function getRandomPizza()
+    {
+        return $this->random;
+    }
+    
+    public function __invoke()
+    {
+        $html = '&lt;div class="hero-unit"&gt;';
+        $html.= '&lt;h1&gt;' . $this->getRandomPizza() . '&lt;/h1&gt;';
+        $html.= '&lt;/div&gt;';
+        
+        return $html;
+    }
+}
+</pre>
+</div>
+</div>

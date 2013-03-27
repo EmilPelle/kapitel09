@@ -1,0 +1,44 @@
+<?php 
+/**
+ * ZF2 Buch Kapitel 9
+ * 
+ * Das Buch "Zend Framework 2 - Von den Grundlagen bis zur fertigen Anwendung"
+ * von Ralf Eggert ist im Addison-Wesley Verlag erschienen. 
+ * ISBN 978-3-8273-2994-3
+ * 
+ * @package    Application
+ * @author     Ralf Eggert <r.eggert@travello.de>
+ * @copyright  Alle Listings sind urheberrechtlich geschützt!
+ * @link       http://www.zendframeworkbuch.de/ und http://www.awl.de/2994
+ */
+
+/**
+ * Listing 9.8 view script
+ * 
+ * @package    Application
+ */
+?>
+<div class="row">
+<div class="span9">
+<h1>Listing 9.8</h1>
+<h3>Beispiel für ein View-Skript</h3>
+<pre>
+&lt;?php
+&lt;div class="hero-unit"&gt;
+&lt;h1&gt;Hallo Pizza!&lt;/h1&gt;
+&lt;/div&gt;
+&lt;div class="row"&gt;
+&lt;?php foreach ($this-&gt;pizzaList as $key =&gt; $pizza) :?&gt;
+&lt;?php $url = $this-&gt;url('pizza/action', array('action' =&gt; 'show', 'id' =&gt; $key)); ?&gt;
+&lt;div class="span3"&gt;
+&lt;p&gt;
+&lt;a class="btn btn-primary" href="&lt;?php echo $url; ?&gt;"&gt;
+Pizza &lt;?php echo $this-&gt;escapeHtml($pizza); ?&gt;
+&lt;/a&gt;
+&lt;/p&gt;
+&lt;/div&gt;
+&lt;?php endforeach;?&gt;
+&lt;/div&gt;
+</pre>
+</div>
+</div>

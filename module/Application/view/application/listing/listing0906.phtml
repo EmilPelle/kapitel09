@@ -1,0 +1,68 @@
+<?php 
+/**
+ * ZF2 Buch Kapitel 9
+ * 
+ * Das Buch "Zend Framework 2 - Von den Grundlagen bis zur fertigen Anwendung"
+ * von Ralf Eggert ist im Addison-Wesley Verlag erschienen. 
+ * ISBN 978-3-8273-2994-3
+ * 
+ * @package    Application
+ * @author     Ralf Eggert <r.eggert@travello.de>
+ * @copyright  Alle Listings sind urheberrechtlich geschützt!
+ * @link       http://www.zendframeworkbuch.de/ und http://www.awl.de/2994
+ */
+
+/**
+ * Listing 9.6 view script
+ * 
+ * @package    Application
+ */
+?>
+<div class="row">
+<div class="span9">
+<h1>Listing 9.6</h1>
+<h3>Modul-Klasse registriert <code>JsonStrategy</code> für ausgewählte Controller</h3>
+<pre>
+&lt;?php
+namespace Pizza;
+
+use Zend\EventManager\EventInterface;
+use Zend\ModuleManager\Feature\BootstrapListenerInterface;
+use Zend\ModuleManager\Feature\ControllerProviderInterface;
+
+class Module implements 
+    BootstrapListenerInterface,
+    ControllerProviderInterface
+{
+    public function onBootstrap(EventInterface $e)
+    {
+        $eventManager = $e->getApplication()->getEventManager();
+        $eventManager->attach('render', array($this, 'registerJsonStrategy'), 100);
+    }
+
+    public function getControllerConfig()
+    {
+        return array(
+            'invokables' => array(
+                'pizza-json' => 'Pizza\Controller\JsonController',
+            ),
+        );
+    }
+    
+    public function registerJsonStrategy($e)
+    {
+        $controller = $e->getRouteMatch()->getParam('controller');
+        if (false === strpos($controller, 'json')) {
+            return;
+        }
+        
+        $serviceManager = $e->getApplication()->getServiceManager();
+        $view           = $serviceManager->get('Zend\View\View');
+        $jsonStrategy   = $serviceManager->get('ViewJsonStrategy');
+        
+        $view->getEventManager()->attach($jsonStrategy, 100);
+    }
+}
+</pre>
+</div>
+</div>

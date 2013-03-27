@@ -1,0 +1,113 @@
+<?php 
+/**
+ * ZF2 Buch Kapitel 9
+ * 
+ * Das Buch "Zend Framework 2 - Von den Grundlagen bis zur fertigen Anwendung"
+ * von Ralf Eggert ist im Addison-Wesley Verlag erschienen. 
+ * ISBN 978-3-8273-2994-3
+ * 
+ * @package    Application
+ * @author     Ralf Eggert <r.eggert@travello.de>
+ * @copyright  Alle Listings sind urheberrechtlich geschützt!
+ * @link       http://www.zendframeworkbuch.de/ und http://www.awl.de/2994
+ */
+
+/**
+ * Listing 9.1 view script
+ * 
+ * @package    Application
+ */
+
+?>
+<div class="row">
+<div class="span9">
+<h1>Listing 9.1</h1>
+<h3>Zusammenspiel der Teilkomponenten von <code>Zend\View</code></h3>
+<pre>
+&lt;?php
+use Zend\Http\PhpEnvironment\Request;
+use Zend\Http\PhpEnvironment\Response;
+use Zend\View\View;
+use Zend\View\HelperPluginManager;
+use Zend\View\Model\ViewModel;
+use Zend\View\Renderer\PhpRenderer;
+use Zend\View\Resolver\TemplateMapResolver;
+use Zend\View\Strategy\PhpRendererStrategy;
+
+$helpers = new HelperPluginManager();
+
+$resolver = new TemplateMapResolver(array(
+    'pizza/widget' => LUIGI_ROOT . '/module/Pizza/view/pizza/index/widget.phtml'
+));
+
+$renderer = new PhpRenderer();
+$renderer->setHelperPluginManager($helpers);
+$renderer->setResolver($resolver);
+
+$request  = new Request();
+$response = new Response();
+
+$model = new ViewModel();
+$model->setTemplate('pizza/widget');
+$model->setVariables(array(
+    'pizzaName'     => 'Pizza Salami',
+    'pizzaPrice'    => 6.95,
+    'pizzaCrust'    => 'Weizenmehl',
+    'pizzaToppings' => array('Salami', 'Tomatenpampe', 'Käse'),
+));
+
+$view = new View();
+$view->setRequest($request);
+$view->setResponse($response);
+$view->getEventManager()->attach(new PhpRendererStrategy($renderer));
+$view->render($model);
+
+echo $view->getResponse()->getContent();
+</pre>
+<h3>Ausgabe</h3>
+<?php
+use Zend\Http\PhpEnvironment\Request;
+use Zend\Http\PhpEnvironment\Response;
+use Zend\View\View;
+use Zend\View\HelperPluginManager;
+use Zend\View\Model\ViewModel;
+use Zend\View\Renderer\PhpRenderer;
+use Zend\View\Resolver\TemplateMapResolver;
+use Zend\View\Strategy\PhpRendererStrategy;
+
+$helpers = new HelperPluginManager();
+
+$resolver = new TemplateMapResolver(array(
+    'pizza/widget' => LUIGI_ROOT . '/module/Pizza/view/pizza/index/widget.phtml'
+));
+
+$renderer = new PhpRenderer();
+$renderer->setHelperPluginManager($helpers);
+$renderer->setResolver($resolver);
+
+$request  = new Request();
+$response = new Response();
+
+$model = new ViewModel();
+$model->setTemplate('pizza/widget');
+$model->setVariables(array(
+    'pizzaName'     => 'Pizza Salami',
+    'pizzaPrice'    => 6.95,
+    'pizzaCrust'    => 'Weizenmehl',
+    'pizzaToppings' => array(
+        'Salami',
+        'Tomatenpampe',
+        'Käse',
+    ),
+));
+
+$view = new View();
+$view->setRequest($request);
+$view->setResponse($response);
+$view->getEventManager()->attach(new PhpRendererStrategy($renderer));
+$view->render($model);
+
+echo $view->getResponse()->getContent();
+?>
+</div>
+</div>

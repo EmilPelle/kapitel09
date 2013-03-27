@@ -1,0 +1,90 @@
+<?php 
+/**
+ * ZF2 Buch Kapitel 9
+ * 
+ * Das Buch "Zend Framework 2 - Von den Grundlagen bis zur fertigen Anwendung"
+ * von Ralf Eggert ist im Addison-Wesley Verlag erschienen. 
+ * ISBN 978-3-8273-2994-3
+ * 
+ * @package    Application
+ * @author     Ralf Eggert <r.eggert@travello.de>
+ * @copyright  Alle Listings sind urheberrechtlich geschützt!
+ * @link       http://www.zendframeworkbuch.de/ und http://www.awl.de/2994
+ */
+
+/**
+ * Listing 9.9 view script
+ * 
+ * @package    Application
+ */
+?>
+<div class="row">
+<div class="span9">
+<h1>Listing 9.9</h1>
+<h3>View-Skript verwendet View-Helper für HTML-Kopfdaten</h3>
+<pre>
+&lt;?php
+use Zend\View\Helper\Doctype;
+
+$this-&gt;doctype(Doctype::HTML5);
+$this-&gt;headTitle('Luigis Pizza-Service');
+$this-&gt;headMeta()-&gt;appendName('viewport', 'width=device-width, initial-scale=1.0');
+$this-&gt;headMeta()-&gt;appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8');
+$this-&gt;headMeta()-&gt;setCharset('UTF-8');
+$this-&gt;headLink()-&gt;prependStylesheet('/css/bootstrap.min.css');
+$this-&gt;headLink()-&gt;appendAlternate('/blog/rss', 'application/atom+xml', 'RSS Feed');
+$this-&gt;headScript()-&gt;prependFile('/js/html5.js', 'text/javascript', array('conditional' =&gt; 'lt IE 9',));
+
+?&gt;
+&lt;?php echo $this-&gt;doctype() . "\n";?&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+&lt;?php echo $this-&gt;headTitle() . "\n"; ?&gt;
+&lt;?php echo $this-&gt;headMeta() . "\n"; ?&gt;
+&lt;?php echo $this-&gt;headLink() . "\n"; ?&gt;
+&lt;?php echo $this-&gt;headScript() . "\n"; ?&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;!-- Hier könnte Ihre Werbung stehen... --&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</pre>
+<h3>Ausgabe</h3>
+<pre>
+<?php 
+use Zend\Http\PhpEnvironment\Request;
+use Zend\Http\PhpEnvironment\Response;
+use Zend\View\View;
+use Zend\View\HelperPluginManager;
+use Zend\View\Model\ViewModel;
+use Zend\View\Renderer\PhpRenderer;
+use Zend\View\Resolver\TemplateMapResolver;
+use Zend\View\Strategy\PhpRendererStrategy;
+
+$helpers = new HelperPluginManager();
+
+$resolver = new TemplateMapResolver(array(
+    'pizza/header' => LUIGI_ROOT . '/module/Pizza/view/pizza/helpers/header.phtml'
+));
+
+$renderer = new PhpRenderer();
+$renderer->setHelperPluginManager($helpers);
+$renderer->setResolver($resolver);
+
+$request  = new Request();
+$response = new Response();
+
+$model = new ViewModel();
+$model->setTemplate('pizza/header');
+
+$view = new View();
+$view->setRequest($request);
+$view->setResponse($response);
+$view->getEventManager()->attach(new PhpRendererStrategy($renderer));
+$view->render($model);
+
+echo $this->escapeHtml($view->getResponse()->getContent());
+?>
+</pre>
+</div>
+</div>

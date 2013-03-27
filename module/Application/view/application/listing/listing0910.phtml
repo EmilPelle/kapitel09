@@ -1,0 +1,86 @@
+<?php 
+/**
+ * ZF2 Buch Kapitel 9
+ * 
+ * Das Buch "Zend Framework 2 - Von den Grundlagen bis zur fertigen Anwendung"
+ * von Ralf Eggert ist im Addison-Wesley Verlag erschienen. 
+ * ISBN 978-3-8273-2994-3
+ * 
+ * @package    Application
+ * @author     Ralf Eggert <r.eggert@travello.de>
+ * @copyright  Alle Listings sind urheberrechtlich geschützt!
+ * @link       http://www.zendframeworkbuch.de/ und http://www.awl.de/2994
+ */
+
+/**
+ * Listing 9.10 view script
+ * 
+ * @package    Application
+ */
+?>
+<div class="row">
+<div class="span9">
+<h1>Listing 9.10</h1>
+<h3>View-Skript verwendet View-Helper für Escaping</h3>
+<pre>
+&lt;?php
+$escapeHtml     = '&lt;p onMouseOver="alert('XSS');"&gt;Text&lt;/p&gt;';
+$escapeHtmlAttr = '&lt;p width="100%"&gt;Text&lt;/p&gt;';
+$escapeJs       = 'alert('XSS');';
+$escapeCss      = 'body {font-size: 100px;}';
+$escapeUrl      = 'http://luigis-pizza.local/pizza/show/3';
+?&gt;
+&lt;?php echo $escapeHtml . "\n"; ?&gt;
+&lt;?php echo $this-&gt;escapeHtml($escapeHtml) . "\n";?&gt;
+
+&lt;?php echo $escapeHtmlAttr . "\n"; ?&gt;
+&lt;?php echo $this-&gt;escapeHtmlAttr($escapeHtmlAttr) . "\n";?&gt;
+
+&lt;?php echo $escapeJs . "\n"; ?&gt;
+&lt;?php echo $this-&gt;escapeJs($escapeJs) . "\n";?&gt;
+
+&lt;?php echo $escapeCss . "\n"; ?&gt;
+&lt;?php echo $this-&gt;escapeCss($escapeCss) . "\n";?&gt;
+
+&lt;?php echo $escapeUrl . "\n"; ?&gt;
+&lt;?php echo $this-&gt;escapeUrl($escapeUrl) . "\n";?&gt;
+</pre>
+<h3>Ausgabe</h3>
+<pre>
+<?php 
+use Zend\Http\PhpEnvironment\Request;
+use Zend\Http\PhpEnvironment\Response;
+use Zend\View\View;
+use Zend\View\HelperPluginManager;
+use Zend\View\Model\ViewModel;
+use Zend\View\Renderer\PhpRenderer;
+use Zend\View\Resolver\TemplateMapResolver;
+use Zend\View\Strategy\PhpRendererStrategy;
+
+$helpers = new HelperPluginManager();
+
+$resolver = new TemplateMapResolver(array(
+    'pizza/escaping' => LUIGI_ROOT . '/module/Pizza/view/pizza/helpers/escaping.phtml'
+));
+
+$renderer = new PhpRenderer();
+$renderer->setHelperPluginManager($helpers);
+$renderer->setResolver($resolver);
+
+$request  = new Request();
+$response = new Response();
+
+$model = new ViewModel();
+$model->setTemplate('pizza/escaping');
+
+$view = new View();
+$view->setRequest($request);
+$view->setResponse($response);
+$view->getEventManager()->attach(new PhpRendererStrategy($renderer));
+$view->render($model);
+
+echo $this->escapeHtml($view->getResponse()->getContent());
+?>
+</pre>
+</div>
+</div>
